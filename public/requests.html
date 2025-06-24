@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="cohiveApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoHive - Project Requests</title>
+  
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- AngularJS -->
+  <script src="https://cdn.jsdelivr.net/npm/angular@1.8.2/angular.min.js"></script>
+  
+  <style>
+    :root {
+      --purple: #6c5ce7;
+      --pink: #fd79a8;
+      --teal: #00cec9;
+      --yellow: #ffeaa7;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --gradient: linear-gradient(135deg, var(--purple), var(--pink));
+    }
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .navbar {
+      background: rgba(255, 255, 255, 0.8) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 1.8rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .request-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .request-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .status-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-weight: 600;
+    }
+    
+    .status-pending {
+      background: rgba(255, 193, 7, 0.1);
+      color: #ffc107;
+    }
+    
+    .status-approved {
+      background: rgba(40, 167, 69, 0.1);
+      color: #28a745;
+    }
+    
+    .status-rejected {
+      background: rgba(220, 53, 69, 0.1);
+      color: #dc3545;
+    }
+    
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .footer {
+      background: var(--dark);
+      color: white;
+      padding: 2rem 0;
+      margin-top: auto;
+    }
+
+    .footer a {
+      color: var(--teal);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      color: var(--pink);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body ng-controller="RequestsController">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="/">CoHive</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard.html">
+              <i class="fas fa-home me-1"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/project.html">
+              <i class="fas fa-project-diagram me-1"></i> Projects
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/requests.html">
+              <i class="fas fa-bell me-1"></i> Requests
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/profile.html">
+              <i class="fas fa-user me-1"></i> Profile
+            </a>
+          </li>
+        </ul>
+        <div class="user-info" ng-if="user">
+          <div class="user-avatar">
+            {{user.name.charAt(0)}}
+          </div>
+          <div>
+            <div class="fw-bold">{{user.name}}</div>
+            <div class="small text-muted">{{user.regNo}}</div>
+          </div>
+          <a class="nav-link" href="#" ng-click="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="mb-0">Project Requests</h1>
+      <div class="btn-group">
+        <button class="btn btn-outline-primary" ng-click="filterRequests('all')" ng-class="{'active': currentFilter === 'all'}">
+          All
+        </button>
+        <button class="btn btn-outline-primary" ng-click="filterRequests('pending')" ng-class="{'active': currentFilter === 'pending'}">
+          Pending
+        </button>
+        <button class="btn btn-outline-primary" ng-click="filterRequests('approved')" ng-class="{'active': currentFilter === 'approved'}">
+          Approved
+        </button>
+        <button class="btn btn-outline-primary" ng-click="filterRequests('rejected')" ng-class="{'active': currentFilter === 'rejected'}">
+          Rejected
+        </button>
+      </div>
+    </div>
+
+    <!-- Received Requests Section -->
+    <div class="mb-5">
+      <h3 class="mb-4">Received Requests</h3>
+      <div ng-if="receivedRequests.length > 0">
+        <div class="request-card" ng-repeat="request in filteredReceivedRequests">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <h5 class="mb-1">{{request.project.title}}</h5>
+              <p class="text-muted mb-0">Requested by: {{request.student.name}}</p>
+            </div>
+            <span class="status-badge" ng-class="{
+              'status-pending': request.status === 'pending',
+              'status-approved': request.status === 'approved',
+              'status-rejected': request.status === 'rejected'
+            }">
+              {{request.status | uppercase}}
+            </span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span class="text-muted me-3">
+                <i class="fas fa-calendar me-1"></i> {{request.createdAt | date:'medium'}}
+              </span>
+            </div>
+            <div ng-if="request.status === 'pending'">
+              <button class="btn btn-success btn-sm me-2" ng-click="updateRequest(request, 'approved')">
+                <i class="fas fa-check me-1"></i> Approve
+              </button>
+              <button class="btn btn-danger btn-sm" ng-click="updateRequest(request, 'rejected')">
+                <i class="fas fa-times me-1"></i> Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center py-5" ng-if="receivedRequests.length === 0">
+        <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+        <h4>No Received Requests</h4>
+        <p class="text-muted">You haven't received any project requests yet.</p>
+      </div>
+    </div>
+
+    <!-- Sent Requests Section -->
+    <div>
+      <h3 class="mb-4">Sent Requests</h3>
+      <div ng-if="sentRequests.length > 0">
+        <div class="request-card" ng-repeat="request in filteredSentRequests">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <h5 class="mb-1">{{request.project.title}}</h5>
+              <p class="text-muted mb-0">Project by: {{request.project.creator.name}}</p>
+            </div>
+            <span class="status-badge" ng-class="{
+              'status-pending': request.status === 'pending',
+              'status-approved': request.status === 'approved',
+              'status-rejected': request.status === 'rejected'
+            }">
+              {{request.status | uppercase}}
+            </span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span class="text-muted me-3">
+                <i class="fas fa-calendar me-1"></i> {{request.createdAt | date:'medium'}}
+              </span>
+            </div>
+            <div ng-if="request.status === 'pending'">
+              <button class="btn btn-danger btn-sm" ng-click="cancelRequest(request)">
+                <i class="fas fa-times me-1"></i> Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center py-5" ng-if="sentRequests.length === 0">
+        <i class="fas fa-paper-plane fa-3x text-muted mb-3"></i>
+        <h4>No Sent Requests</h4>
+        <p class="text-muted">You haven't sent any project requests yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>CoHive</h5>
+          <p>Your collaborative project management platform for VIT students.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="/dashboard.html">Dashboard</a></li>
+            <li><a href="/project.html">Projects</a></li>
+            <li><a href="/requests.html">Requests</a></li>
+            <li><a href="/profile.html">Profile</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Contact</h5>
+          <ul class="list-unstyled">
+            <li><i class="fas fa-envelope me-2"></i> support@cohive.com</li>
+            <li><i class="fas fa-phone me-2"></i> +91 1234567890</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4">
+      <div class="text-center">
+        <p class="mb-0">&copy; 2024 CoHive. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" ng-show="loading">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // AngularJS App
+    angular.module('cohiveApp', [])
+      .controller('RequestsController', ['$scope', '$http', function($scope, $http) {
+        $scope.receivedRequests = [];
+        $scope.sentRequests = [];
+        $scope.filteredReceivedRequests = [];
+        $scope.filteredSentRequests = [];
+        $scope.currentFilter = 'all';
+        $scope.loading = true;
+        $scope.user = null;
+
+        // Initialize
+        $scope.init = function() {
+          $scope.checkSession();
+        };
+
+        // Check session
+        $scope.checkSession = function() {
+          $http.get('/api/check-session', { withCredentials: true })
+            .then(function(response) {
+              if (response.data.success) {
+                $scope.user = response.data.user;
+                $scope.loadRequests();
+              } else {
+                window.location.href = '/auth/login.html';
+              }
+            })
+            .catch(function(error) {
+              console.error('Session check error:', error);
+              window.location.href = '/auth/login.html';
+            });
+        };
+
+        // Load requests
+        $scope.loadRequests = function() {
+          $scope.loading = true;
+          
+          // Load received requests (requests for projects where user is creator)
+          $http.get('/api/projects/requests', { withCredentials: true })
+            .then(function(response) {
+              if (response.data.success) {
+                $scope.receivedRequests = response.data.requests;
+                $scope.filterRequests($scope.currentFilter);
+              }
+            })
+            .catch(function(error) {
+              console.error('Error loading received requests:', error);
+            });
+
+          // Load sent requests (requests where user is the student)
+          $http.get('/api/projects/requests/sent', { withCredentials: true })
+            .then(function(response) {
+              if (response.data.success) {
+                $scope.sentRequests = response.data.requests;
+                $scope.filterRequests($scope.currentFilter);
+              }
+            })
+            .catch(function(error) {
+              console.error('Error loading sent requests:', error);
+            })
+            .finally(function() {
+              $scope.loading = false;
+            });
+        };
+
+        // Filter requests
+        $scope.filterRequests = function(status) {
+          $scope.currentFilter = status;
+          if (status === 'all') {
+            $scope.filteredReceivedRequests = $scope.receivedRequests;
+            $scope.filteredSentRequests = $scope.sentRequests;
+          } else {
+            $scope.filteredReceivedRequests = $scope.receivedRequests.filter(function(request) {
+              return request.status === status;
+            });
+            $scope.filteredSentRequests = $scope.sentRequests.filter(function(request) {
+              return request.status === status;
+            });
+          }
+        };
+
+        // Update request status
+        $scope.updateRequest = function(request, status) {
+          if (!confirm(`Are you sure you want to ${status} this request?`)) {
+            return;
+          }
+
+          $scope.loading = true;
+          
+          // If user is the student and trying to cancel their request
+          if (request.student._id === $scope.user.id && status === 'pending') {
+            $http.delete(`/api/projects/${request.project._id}/requests/${request._id}`, {
+              withCredentials: true
+            })
+            .then(function(response) {
+              if (response.data.success) {
+                // Remove the request from the list
+                const index = $scope.sentRequests.findIndex(r => r._id === request._id);
+                if (index !== -1) {
+                  $scope.sentRequests.splice(index, 1);
+                }
+                $scope.filterRequests($scope.currentFilter);
+              }
+            })
+            .catch(function(error) {
+              console.error('Error canceling request:', error);
+              alert('Failed to cancel request. Please try again.');
+            })
+            .finally(function() {
+              $scope.loading = false;
+            });
+          } else {
+            // For project creator approving/rejecting requests
+            $http.put(`/api/projects/${request.project._id}/requests/${request._id}`, {
+              status: status
+            }, { withCredentials: true })
+            .then(function(response) {
+              if (response.data.success) {
+                request.status = status;
+                $scope.filterRequests($scope.currentFilter);
+              }
+            })
+            .catch(function(error) {
+              console.error('Error updating request:', error);
+              alert('Failed to update request status. Please try again.');
+            })
+            .finally(function() {
+              $scope.loading = false;
+            });
+          }
+        };
+
+        // Cancel sent request
+        $scope.cancelRequest = function(request) {
+          if (!confirm('Are you sure you want to cancel this request?')) {
+            return;
+          }
+
+          $scope.loading = true;
+          $http.delete(`/api/projects/${request.project._id}/requests/${request._id}`, { withCredentials: true })
+            .then(function(response) {
+              if (response.data.success) {
+                const index = $scope.sentRequests.indexOf(request);
+                if (index > -1) {
+                  $scope.sentRequests.splice(index, 1);
+                  $scope.filterRequests($scope.currentFilter);
+                }
+              }
+            })
+            .catch(function(error) {
+              console.error('Error canceling request:', error);
+              alert('Failed to cancel request. Please try again.');
+            })
+            .finally(function() {
+              $scope.loading = false;
+            });
+        };
+
+        // Logout
+        $scope.logout = function() {
+          $http.post('/api/logout', {}, { withCredentials: true })
+            .then(function() {
+              window.location.href = '/auth/login.html';
+            })
+            .catch(function(error) {
+              console.error('Logout error:', error);
+            });
+        };
+
+        // Initialize the controller
+        $scope.init();
+      }]);
+  </script>
+</body>
+</html> 

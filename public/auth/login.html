@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoHive - VIT Student Login</title>
+  
+  <!-- Gen-Z Style Meta -->
+  <meta name="theme-color" content="#6c5ce7">
+  <meta name="description" content="Login to CoHive - VIT's lit platform to find project partners">
+  
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --purple: #6c5ce7;
+      --pink: #fd79a8;
+      --teal: #00cec9;
+      --yellow: #ffeaa7;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --gradient: linear-gradient(135deg, var(--purple), var(--pink));
+    }
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+    }
+    
+    /* Navbar - Glassmorphism */
+    .navbar {
+      background: rgba(255, 255, 255, 0.8) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1rem 0;
+    }
+    
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 1.8rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .nav-link {
+      font-weight: 600;
+      color: var(--dark) !important;
+      margin: 0 0.5rem;
+      position: relative;
+    }
+    
+    .nav-link.active {
+      color: var(--purple) !important;
+    }
+    
+    .nav-link:hover:after {
+      width: 100%;
+    }
+    
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: var(--gradient);
+      transition: width 0.3s ease;
+    }
+    
+    /* VIT Banner */
+    .vit-banner {
+      background: var(--gradient);
+      color: white;
+      padding: 0.75rem 0;
+    }
+    
+    /* Auth Container */
+    .auth-container {
+      min-height: calc(100vh - 200px);
+      display: flex;
+      align-items: center;
+      padding: 3rem 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236c5ce7' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    /* Auth Card */
+    .auth-card {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      border: none;
+    }
+    
+    .auth-card .card-header {
+      background: var(--gradient);
+      color: white;
+      padding: 1.5rem;
+      border-bottom: none;
+    }
+    
+    .auth-card .card-body {
+      padding: 2rem;
+    }
+    
+    /* Form Styles */
+    .form-control:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 0.25rem rgba(108, 92, 231, 0.25);
+    }
+    
+    .input-group-text {
+      background-color: rgba(108, 92, 231, 0.1);
+      border-color: #ced4da;
+      color: var(--purple);
+    }
+    
+    .btn-primary {
+      background: var(--gradient);
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      padding: 12px 24px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+    }
+    
+    /* Benefits Card */
+    .benefits-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      height: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+    
+    .benefit-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gradient);
+      color: white;
+      flex-shrink: 0;
+      margin-right: 1rem;
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 3rem 0 1.5rem;
+    }
+    
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    
+    .footer-links a:hover {
+      color: white;
+      transform: translateX(5px);
+    }
+
+    /* Loading overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      display: none;
+    }
+
+    /* Validation styles */
+    .is-invalid {
+      border-color: #dc3545 !important;
+    }
+
+    .invalid-feedback {
+      display: none;
+      color: #dc3545;
+      font-size: 0.875em;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .auth-container {
+        padding: 2rem 0;
+      }
+      
+      .auth-card .card-body {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="/">CoHive</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <!-- Show these when NOT logged in -->
+          <li class="nav-item" id="loginNavItem">
+            <a class="nav-link active" href="/auth/login.html">Login</a>
+          </li>
+          <li class="nav-item" id="signupNavItem">
+            <a class="nav-link" href="/auth/signup.html">Sign Up</a>
+          </li>
+          <!-- Show these when logged in -->
+          <li class="nav-item d-none" id="dashboardNavItem">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item d-none" id="logoutNavItem">
+            <a class="nav-link" href="#" id="logoutLink">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- VIT Banner -->
+  <div class="vit-banner text-center">
+    <div class="container">
+      <p class="mb-0"><i class="fas fa-university me-2"></i>Exclusively for VIT Students - Find Your Perfect Project Partners</p>
+    </div>
+  </div>
+
+  <!-- Login Form -->
+  <div class="auth-container">
+    <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+          <div class="card auth-card shadow">
+            <div class="card-header">
+              <h3 class="mb-0"><i class="fas fa-sign-in-alt me-2"></i>VIT Student Login</h3>
+            </div>
+            <div class="card-body">
+              <div class="text-center mb-4">
+                <p class="text-muted">Connect with fellow VIT students for collaborative projects</p>
+              </div>
+              
+              <!-- Error Alert -->
+              <div id="errorAlert" class="alert alert-danger d-none" role="alert"></div>
+              
+              <form id="loginForm">
+            <div class="mb-3">
+                  <label for="email" class="form-label">VIT Student Email</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <input type="email" class="form-control" id="email" name="email" autocomplete="username" required>
+                  </div>
+                  <div id="emailError" class="invalid-feedback">
+                    Please enter a valid VIT student email (username@vitstudent.ac.in)
+                  </div>
+                  <div class="form-text">Must be a valid VIT student email</div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="current-password" required>
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="mb-3 form-check">
+                  <input type="checkbox" class="form-check-input" id="remember">
+                  <label class="form-check-label" for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                  <i class="fas fa-sign-in-alt me-2"></i>Login
+                </button>
+              </form>
+              <div class="text-center mt-4">
+                <p class="mb-2">Don't have an account? <a href="signup.html" class="fw-bold">Sign up here</a></p>
+                <a href="#" class="text-muted small">Forgot password?</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Login Benefits -->
+        <div class="col-md-5 d-none d-md-block">
+          <div class="benefits-card p-4">
+            <h4 class="mb-4 text-center">Why VIT Students Love CoHive</h4>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div>
+                <h5 class="mb-1">Find Project Partners</h5>
+                <p class="text-muted mb-0">Connect with students from your department or across departments for collaborative projects.</p>
+              </div>
+            </div>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+              <div>
+                <h5 class="mb-1">VIT-Exclusive Community</h5>
+                <p class="text-muted mb-0">Our platform is exclusively for VIT students, ensuring a trusted and relevant network.</p>
+              </div>
+            </div>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="fas fa-star"></i>
+              </div>
+              <div>
+                <h5 class="mb-1">Build Your Portfolio</h5>
+                <p class="text-muted mb-0">Complete projects to showcase your abilities to potential employers.</p>
+              </div>
+            </div>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+              <div>
+                <h5 class="mb-1">Share Knowledge</h5>
+                <p class="text-muted mb-0">Learn from peers and share your expertise to create better projects together.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <h5><i class="fas fa-cubes me-2"></i>CoHive</h5>
+          <p>A project collaboration platform exclusively for VIT students.</p>
+        </div>
+        <div class="col-md-3 mb-4">
+          <h5>Links</h5>
+          <ul class="list-unstyled footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/auth/login.html">Login</a></li>
+            <li><a href="/auth/signup.html">Sign Up</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 mb-4">
+          <h5>Contact</h5>
+          <ul class="list-unstyled footer-links">
+            <li><a href="mailto:support@cohive.com">support@cohive.com</a></li>
+            <li>VIT University</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="bg-secondary">
+      <div class="row">
+        <div class="col-12 text-center">
+          <p class="mb-0"> 2025 CoHive | VIT Project Collaboration Platform</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // DOM Elements
+    const loginForm = document.getElementById('loginForm');
+    const togglePassword = document.getElementById('togglePassword');
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    const emailInput = document.getElementById('email');
+    const emailError = document.getElementById('emailError');
+    const errorAlert = document.getElementById('errorAlert');
+
+    // Toggle password visibility
+    togglePassword.addEventListener('click', function() {
+      const passwordInput = document.getElementById('password');
+      const icon = this.querySelector('i');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+
+    // Real-time email validation
+    emailInput.addEventListener('input', function() {
+      const emailRegex = /^[a-zA-Z0-9.]+@vitstudent\.ac\.in$/;
+      const isValid = emailRegex.test(this.value);
+      
+      if (this.value && !isValid) {
+        this.classList.add('is-invalid');
+        emailError.style.display = 'block';
+      } else {
+        this.classList.remove('is-invalid');
+        emailError.style.display = 'none';
+      }
+    });
+
+    // Show error message
+    function showError(message) {
+      errorAlert.textContent = message;
+      errorAlert.classList.remove('d-none');
+    }
+
+    // Hide error message
+    function hideError() {
+      errorAlert.classList.add('d-none');
+    }
+
+    // Check if user is already logged in
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const token = localStorage.getItem('token');
+        
+        if (!token) return;
+
+        const response = await fetch('/api/check-session', {
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            window.location.href = '/dashboard.html';
+          } else {
+            // Clear invalid token
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+          }
+        }
+      } catch (err) {
+        console.error('Auth check failed:', err);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
+    });
+
+    // Handle form submission
+    loginForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      // Validate email format first
+      const emailRegex = /^[a-zA-Z0-9.]+@vitstudent\.ac\.in$/;
+      if (!emailRegex.test(emailInput.value)) {
+        showError('Please enter a valid VIT student email');
+        emailInput.classList.add('is-invalid');
+        emailError.style.display = 'block';
+        return;
+      }
+
+      const email = emailInput.value;
+      const password = document.getElementById('password').value;
+      const submitBtn = document.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+
+      try {
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Logging in...';
+        loadingOverlay.style.display = 'flex';
+        hideError();
+
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Store token and user data
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          
+          // Redirect to dashboard
+          window.location.href = '/dashboard.html';
+        } else {
+          throw new Error(data.error || 'Login failed. Please check your credentials.');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showError(error.message || 'Login failed. Please try again.');
+      } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        loadingOverlay.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

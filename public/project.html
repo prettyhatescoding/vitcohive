@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details - CoHive</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --purple: #6c5ce7;
+            --pink: #fd79a8;
+            --teal: #00cec9;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gradient: linear-gradient(135deg, var(--purple), var(--pink));
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+        }
+        
+        .navbar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .project-header {
+            background: var(--gradient);
+            color: white;
+            padding: 5rem 0 3rem;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-header::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+            opacity: 0.3;
+        }
+        
+        .project-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .skill-badge {
+            background-color: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+        }
+        
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .member-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .member-card:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(5px);
+        }
+        
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.35rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background-color: rgba(0, 206, 201, 0.2);
+            color: var(--teal);
+        }
+        
+        .status-completed {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            border: none;
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .project-header {
+                padding: 3rem 0 2rem;
+            }
+            
+            .project-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Footer Styles */
+        footer {
+            background: var(--dark);
+            color: #ffffff;
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        footer h5 {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        footer p {
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        footer a {
+            color: #ffffff;
+            opacity: 0.9;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--primary);
+            opacity: 1;
+        }
+
+        footer .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            margin-right: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        footer .social-links a:hover {
+            background: var(--primary);
+            color: #ffffff;
+            transform: translateY(-3px);
+        }
+
+        footer .list-unstyled li {
+            margin-bottom: 0.75rem;
+        }
+
+        footer .list-unstyled a {
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        footer .list-unstyled a:hover {
+            color: var(--primary);
+            opacity: 1;
+        }
+
+        footer hr {
+            border-color: rgba(255, 255, 255, 0.1);
+            margin: 2rem 0;
+        }
+
+        footer .text-muted {
+            color: #ffffff !important;
+            opacity: 0.9;
+        }
+
+        footer .text-muted i {
+            color: var(--primary);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand fs-3" href="/">CoHive</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard.html">
+                            <i class="fas fa-home me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/requests.html">
+                            <i class="fas fa-bell me-1"></i> Requests
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile.html">
+                            <i class="fas fa-user me-1"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <div class="user-avatar" id="userInitial">U</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Project Header -->
+    <div class="project-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h1 class="project-title" id="projectTitle">Project Title</h1>
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <div class="project-meta d-flex gap-2 flex-wrap">
+                            <div class="project-meta-item d-flex align-items-center">
+                                <i class="fas fa-building me-1"></i>
+                                <span id="projectDepartment">Department</span>
+                            </div>
+                            <div class="project-meta-item d-flex align-items-center">
+                                <i class="fas fa-calendar me-1"></i>
+                                <span id="projectYear">2025</span>
+                            </div>
+                            <div class="project-meta-item d-flex align-items-center">
+                                <i class="fas fa-users me-1"></i>
+                                <span id="memberCount">0 members</span>
+                            </div>
+                        </div>
+                        <span class="status-badge status-active" id="projectStatus">Active</span>
+                    </div>
+                </div>
+            </div>
+            <div class="skills-list mt-3" id="skillsList"></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Project Description Card -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h2 class="h4 mb-0">About the Project</h2>
+                            <button id="editDescriptionBtn" class="btn btn-sm btn-outline-primary" style="display: none;">
+                                <i class="fas fa-edit me-1"></i>Edit
+                            </button>
+                        </div>
+                        <p id="projectDescription" class="lead">Loading project details...</p>
+                    </div>
+                </div>
+
+                <!-- Project Updates Card -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h2 class="h4 mb-0">Project Updates</h2>
+                            <button id="addUpdateBtn" class="btn btn-sm btn-outline-primary" style="display: none;">
+                                <i class="fas fa-plus me-1"></i>Add Update
+                            </button>
+                        </div>
+                        <div id="updatesList">
+                            <div class="alert alert-light">
+                                No updates yet. Check back soon!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Members Section Card -->
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="h4 mb-3">Team Members</h2>
+                        <div id="membersList">
+                            <div class="text-center py-3">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="joinProjectBtn" class="btn btn-primary w-100 mt-3">
+                            <i class="fas fa-plus me-2"></i>Join Project
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Project Progress Card -->
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h2 class="h4 mb-0">Project Progress</h2>
+                            <button id="editProgressBtn" class="btn btn-sm btn-outline-primary" style="display: none;">
+                                <i class="fas fa-edit me-1"></i>Edit
+                            </button>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div id="progressBar" class="progress-bar" role="progressbar" style="width: 25%;"></div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <small class="text-muted" id="progressText">25% completed</small>
+                            <small class="text-muted" id="dueDateText">Due in 2 weeks</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Status Card (for creators only) -->
+                <div class="card mt-4" id="projectStatusCard" style="display: none;">
+                    <div class="card-body">
+                        <h2 class="h4 mb-3">Update Project Status</h2>
+                        <div class="mb-3">
+                            <label for="statusSelect" class="form-label">Current Status</label>
+                            <select class="form-select" id="statusSelect">
+                                <option value="Open">Open</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </div>
+                        <button id="updateStatusBtn" class="btn btn-primary w-100">
+                            <i class="fas fa-save me-2"></i>Update Status
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Join Requests Card (for creators only) -->
+                <div class="card mt-4" id="joinRequestsCard" style="display: none;">
+                    <div class="card-body">
+                        <h2 class="h4 mb-3">Join Requests</h2>
+                        <div id="joinRequestsList">
+                            <div class="text-center py-3">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Join Request Modal -->
+    <div class="modal fade" id="joinRequestModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Request to Join Project</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="joinRequestForm">
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Send Request</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Description Modal -->
+    <div class="modal fade" id="editDescriptionModal" tabindex="-1" aria-labelledby="editDescriptionModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editDescriptionModalLabel">Edit Project Description</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="descriptionInput" class="form-control" rows="5"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveDescriptionBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Updates Modal -->
+    <div class="modal fade" id="editUpdatesModal" tabindex="-1" aria-labelledby="editUpdatesModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUpdatesModalLabel">Add Project Update</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="updateInput" class="form-control" rows="3" placeholder="What's new in the project?"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveUpdateBtn">Post Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Progress Modal -->
+    <div class="modal fade" id="editProgressModal" tabindex="-1" aria-labelledby="editProgressModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProgressModalLabel">Update Project Progress</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="range" class="form-range" id="progressInput" min="0" max="100" step="5">
+                    <div class="text-center mt-2">
+                        Progress: <span id="progressValue">0</span>%
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveProgressBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
+
+    <!-- Footer -->
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="mb-3">CoHive</h5>
+                    <p class="text-muted">Empowering students to collaborate, innovate, and build amazing projects together.</p>
+                    <div class="social-links">
+                        <a href="#" class="me-3"><i class="fab fa-github"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4 mb-md-0">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/dashboard.html">Dashboard</a></li>
+                        <li class="mb-2"><a href="/profile.html">Profile</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4 mb-md-0">
+                    <h5 class="mb-3">Resources</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Documentation</a></li>
+                        <li class="mb-2"><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="mb-3">Contact Us</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> support@cohive.com</li>
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> VIT University, Vellore</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <p class="mb-0">&copy; 2025 CoHive. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap & JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script>
+        // Global variables
+        let currentUser = null;
+        let currentProject = null;
+        let joinRequestModal = null;
+        let editDescriptionModal = null;
+        let addUpdateModal = null;
+        let editProgressModal = null;
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Check authentication
+                await checkAuthentication();
+                
+                // Initialize Bootstrap modals
+                joinRequestModal = new bootstrap.Modal(document.getElementById('joinRequestModal'));
+                editDescriptionModal = new bootstrap.Modal(document.getElementById('editDescriptionModal'));
+                addUpdateModal = new bootstrap.Modal(document.getElementById('editUpdatesModal'));
+                editProgressModal = new bootstrap.Modal(document.getElementById('editProgressModal'));
+                
+                // Get project ID from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const projectId = urlParams.get('id');
+                
+                if (projectId) {
+                    await loadProjectDetails(projectId);
+                } else {
+                    showToast('Project ID not found', 'danger');
+                }
+                
+                // Setup event listeners
+                setupEventListeners();
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showToast('Error initializing page', 'danger');
+            }
+        });
+
+        // Check user authentication
+        async function checkAuthentication() {
+            try {
+                const response = await fetch('/api/check-session', {
+                    credentials: 'include'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Authentication failed');
+                }
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'Authentication failed');
+                }
+                
+                currentUser = data.user;
+                
+                // Set user avatar initial
+                if (currentUser.name) {
+                    const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                    document.getElementById('userInitial').textContent = initials;
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Authentication error:', error);
+                window.location.href = '/auth/login.html';
+                return false;
+            }
+        }
+
+        // Load project details
+        async function loadProjectDetails(projectId) {
+            try {
+                const token = localStorage.getItem('token');
+                
+                // Show loading state
+                document.getElementById('membersList').innerHTML = `
+                    <div class="text-center py-3">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                `;
+                
+                const response = await fetch(`/api/projects/${projectId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `Failed to load project: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error(data.error || 'Failed to load project data');
+                }
+                
+                currentProject = data.project;
+                
+                // Update UI with project details
+                updateProjectUI();
+                
+                // Check if user is creator to show admin controls
+                if (currentProject.creator._id === currentUser.id) {
+                    document.getElementById('projectStatusCard').style.display = 'block';
+                    document.getElementById('joinRequestsCard').style.display = 'block';
+                    document.getElementById('statusSelect').value = currentProject.status;
+                    
+                    // Show edit buttons for creator
+                    document.getElementById('editDescriptionBtn').style.display = 'block';
+                    document.getElementById('addUpdateBtn').style.display = 'block';
+                    document.getElementById('editProgressBtn').style.display = 'block';
+                    
+                    await loadJoinRequests();
+                }
+                
+                // Check if user is already a member or has pending request
+                const isMember = currentProject.members.some(m => m._id === currentUser.id);
+                const hasPendingRequest = currentProject.joinRequests?.some(
+                    req => req.student._id === currentUser.id && req.status === 'Pending'
+                );
+                
+                document.getElementById('joinProjectBtn').style.display = 
+                    (isMember || hasPendingRequest) ? 'none' : 'block';
+                
+            } catch (error) {
+                console.error('Error loading project:', error);
+                document.getElementById('projectDescription').textContent = 'Failed to load project details.';
+                document.getElementById('membersList').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        ${error.message || 'Failed to load project details. Please try again later.'}
+                    </div>
+                `;
+                showToast(error.message || 'Failed to load project details', 'danger');
+            }
+        }
+
+        // Update project UI with loaded data
+        function updateProjectUI() {
+            document.getElementById('projectTitle').textContent = currentProject.title || 'Untitled Project';
+            document.getElementById('projectDepartment').textContent = currentProject.department || 'Not specified';
+            document.getElementById('projectYear').textContent = currentProject.year || 'Not specified';
+            document.getElementById('projectDescription').textContent = currentProject.description || 'No description provided.';
+            document.getElementById('memberCount').textContent = `${currentProject.members.length} member${currentProject.members.length !== 1 ? 's' : ''}`;
+            
+            // Update status
+            document.getElementById('projectStatus').textContent = currentProject.status || 'Active';
+            if (currentProject.status === 'Completed') {
+                document.getElementById('projectStatus').classList.remove('status-active');
+                document.getElementById('projectStatus').classList.add('status-completed');
+            } else {
+                document.getElementById('projectStatus').classList.remove('status-completed');
+                document.getElementById('projectStatus').classList.add('status-active');
+            }
+            
+            // Update skills
+            const skillsList = document.getElementById('skillsList');
+            skillsList.innerHTML = currentProject.skillsRequired?.map(skill => `
+                <span class="skill-badge">${skill}</span>
+            `).join('') || '<span class="text-muted">No skills specified</span>';
+            
+            // Update members list
+            const membersList = document.getElementById('membersList');
+            membersList.innerHTML = currentProject.members.map(member => `
+                <div class="member-card">
+                    <div class="member-avatar">
+                        ${member.name ? member.name.split(' ').map(n => n[0]).join('').toUpperCase() : '?'}
+                    </div>
+                    <div>
+                        <div class="fw-bold">${member.name || 'Unknown'}</div>
+                        <div class="small text-muted">${member.regNo || ''}</div>
+                        ${member._id === currentProject.creator._id ? '<span class="badge bg-primary">Creator</span>' : ''}
+                    </div>
+                    <div class="ms-auto">
+                        <a href="/profile.html?id=${member._id}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-user me-1"></i>View Profile
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update progress
+            if (currentProject.progress) {
+                document.getElementById('progressBar').style.width = `${currentProject.progress}%`;
+                document.getElementById('progressText').textContent = `${currentProject.progress}% completed`;
+            }
+            
+            if (currentProject.dueDate) {
+                const dueDate = new Date(currentProject.dueDate);
+                const today = new Date();
+                const diffTime = dueDate - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays > 0) {
+                    document.getElementById('dueDateText').textContent = `Due in ${diffDays} days`;
+                } else if (diffDays === 0) {
+                    document.getElementById('dueDateText').textContent = 'Due today';
+                } else {
+                    document.getElementById('dueDateText').textContent = `Overdue by ${Math.abs(diffDays)} days`;
+                }
+            }
+            
+            // Update project updates
+            updateProjectUpdates();
+        }
+        
+        // Update project updates
+        function updateProjectUpdates() {
+            const updatesList = document.getElementById('updatesList');
+            
+            if (!currentProject.updates || currentProject.updates.length === 0) {
+                updatesList.innerHTML = `
+                    <div class="alert alert-light">
+                        No updates yet. Check back soon!
+                    </div>
+                `;
+                return;
+            }
+            
+            updatesList.innerHTML = currentProject.updates.map(update => `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p class="card-text">${update.content}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Posted by ${update.postedBy?.name || 'Unknown'}</small>
+                            <small class="text-muted">${new Date(update.createdAt).toLocaleString()}</small>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load join requests for the project
+        async function loadJoinRequests() {
+            try {
+                // First check session
+                const sessionResponse = await fetch('/api/check-session', {
+                    credentials: 'include'
+                });
+                
+                if (!sessionResponse.ok) {
+                    throw new Error('Session check failed');
+                }
+                
+                const sessionData = await sessionResponse.json();
+                if (!sessionData.success) {
+                    throw new Error('Invalid session');
+                }
+
+                // Then fetch join requests
+                const response = await fetch(`/api/projects/requests?projectId=${currentProject._id}`, {
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load join requests');
+                }
+                
+                const data = await response.json();
+                if (data.success) {
+                    updateJoinRequestsUI(data.requests);
+                }
+            } catch (error) {
+                console.error('Error loading join requests:', error);
+                showToast('Failed to load join requests', 'danger');
+            }
+        }
+
+        // Get status badge class
+        function getStatusBadgeClass(status) {
+            switch (status) {
+                case 'pending':
+                    return 'bg-warning';
+                case 'approved':
+                    return 'bg-success';
+                case 'rejected':
+                    return 'bg-danger';
+                default:
+                    return 'bg-secondary';
+            }
+        }
+
+        // Update join requests UI
+        function updateJoinRequestsUI(requests) {
+            const joinRequestsList = document.getElementById('joinRequestsList');
+            
+            if (!requests || requests.length === 0) {
+                joinRequestsList.innerHTML = `
+                    <div class="alert alert-info">
+                        No join requests found.
+                    </div>
+                `;
+                return;
+            }
+
+            joinRequestsList.innerHTML = requests.map(request => `
+                <div class="card mb-3" data-request-id="${request._id}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title mb-1">${request.student.name}</h5>
+                                <p class="card-text text-muted mb-2">${request.student.regNo}</p>
+                            </div>
+                            <span class="badge ${getStatusBadgeClass(request.status)}">
+                                ${request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                            </span>
+                        </div>
+                        <div class="mt-3">
+                            ${request.status === 'pending' ? `
+                                <button class="btn btn-success btn-sm me-2 approve-btn">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button class="btn btn-danger btn-sm reject-btn">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners to the buttons
+            joinRequestsList.querySelectorAll('.approve-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const requestId = e.target.closest('.card').dataset.requestId;
+                    handleRequest(requestId, 'approved');
+                });
+            });
+
+            joinRequestsList.querySelectorAll('.reject-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const requestId = e.target.closest('.card').dataset.requestId;
+                    handleRequest(requestId, 'rejected');
+                });
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Join project button
+            document.getElementById('joinProjectBtn').addEventListener('click', () => {
+                joinRequestModal.show();
+            });
+            
+            // Join request form
+            document.getElementById('joinRequestForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`/api/projects/${currentProject._id}/request`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    });
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Request failed');
+                    }
+                    
+                    showToast('Join request sent!', 'success');
+                    document.getElementById('joinProjectBtn').style.display = 'none';
+                    joinRequestModal.hide();
+                    
+                    // If user is creator, refresh requests list
+                    if (currentProject.creator._id === currentUser.id) {
+                        await loadJoinRequests();
+                    }
+                    
+                } catch (error) {
+                    console.error('Error sending join request:', error);
+                    showToast(error.message || 'Failed to send request', 'danger');
+                }
+            });
+            
+            // Update status button
+            document.getElementById('updateStatusBtn').addEventListener('click', async () => {
+                try {
+                    const token = localStorage.getItem('token');
+                    const newStatus = document.getElementById('statusSelect').value;
+                    
+                    const response = await fetch(`/api/projects/${currentProject._id}/status`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: newStatus })
+                    });
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Failed to update status');
+                    }
+                    
+                    // Update UI
+                    currentProject.status = newStatus;
+                    updateProjectUI();
+                    showToast('Status updated successfully!', 'success');
+                    
+                } catch (error) {
+                    console.error('Error updating status:', error);
+                    showToast(error.message || 'Failed to update status', 'danger');
+                }
+            });
+            
+            // Edit description button
+            document.getElementById('editDescriptionBtn').addEventListener('click', () => {
+                document.getElementById('descriptionInput').value = currentProject.description || '';
+                editDescriptionModal.show();
+            });
+            
+            // Save description button
+            document.getElementById('saveDescriptionBtn').addEventListener('click', async () => {
+                try {
+                    const description = document.getElementById('descriptionInput').value;
+                    const token = localStorage.getItem('token');
+                    
+                    const response = await fetch(`/api/projects/${currentProject._id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ description })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Failed to update project description');
+                    }
+
+                    currentProject.description = description;
+                    document.getElementById('projectDescription').textContent = description;
+                    editDescriptionModal.hide();
+                    showToast('Project description updated successfully', 'success');
+                } catch (error) {
+                    console.error('Error updating project description:', error);
+                    showToast(error.message || 'Failed to update project description', 'danger');
+                }
+            });
+            
+            // Add update button
+            document.getElementById('addUpdateBtn').addEventListener('click', () => {
+                document.getElementById('updateInput').value = '';
+                addUpdateModal.show();
+            });
+            
+            // Save update button
+            document.getElementById('saveUpdateBtn').addEventListener('click', async () => {
+                try {
+                    const content = document.getElementById('updateInput').value;
+                    if (!content.trim()) {
+                        showToast('Please enter an update message', 'warning');
+                        return;
+                    }
+
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`/api/projects/${currentProject._id}/updates`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ content })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Failed to add project update');
+                    }
+
+                    addUpdateModal.hide();
+                    showToast('Project update added successfully', 'success');
+                    await loadProjectDetails(currentProject._id);
+                } catch (error) {
+                    console.error('Error adding project update:', error);
+                    showToast(error.message || 'Failed to add project update', 'danger');
+                }
+            });
+            
+            // Edit progress button
+            document.getElementById('editProgressBtn').addEventListener('click', () => {
+                document.getElementById('progressInput').value = currentProject.progress || 25;
+                document.getElementById('progressValue').textContent = currentProject.progress || 25;
+                editProgressModal.show();
+            });
+            
+            // Save progress button
+            document.getElementById('saveProgressBtn').addEventListener('click', async () => {
+                try {
+                    const progress = parseInt(document.getElementById('progressInput').value);
+                    const token = localStorage.getItem('token');
+                    
+                    const response = await fetch(`/api/projects/${currentProject._id}/progress`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ progress })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Failed to update project progress');
+                    }
+
+                    currentProject.progress = progress;
+                    document.getElementById('progressBar').style.width = `${progress}%`;
+                    document.getElementById('progressText').textContent = `${progress}% completed`;
+                    editProgressModal.hide();
+                    showToast('Project progress updated successfully', 'success');
+                } catch (error) {
+                    console.error('Error updating project progress:', error);
+                    showToast(error.message || 'Failed to update project progress', 'danger');
+                }
+            });
+            
+            // Update progress value display
+            document.getElementById('progressInput').addEventListener('input', (e) => {
+                document.getElementById('progressValue').textContent = e.target.value;
+            });
+            
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/auth/login.html';
+            });
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toastContainer = document.querySelector('.toast-container');
+            const toast = document.createElement('div');
+            
+            toast.className = `toast show align-items-center text-white bg-${type}`;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+            
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+            
+            // Manual close
+            toast.querySelector('.btn-close').addEventListener('click', () => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            });
+        }
+
+        // Handle request status update
+        async function handleRequest(requestId, status) {
+            try {
+                const response = await fetch(`/api/projects/${currentProject._id}/requests/${requestId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status }),
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to update status');
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    showToast('Request status updated successfully', 'success');
+                    await loadJoinRequests();
+                }
+            } catch (error) {
+                console.error('Error updating status:', error);
+                showToast(error.message || 'Failed to update status', 'danger');
+            }
+        }
+    </script>
+</body>
+</html>

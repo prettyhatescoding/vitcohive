@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoHive - VIT Project Collaboration Platform</title>
+  
+  <!-- Gen-Z Style Meta -->
+  <meta name="theme-color" content="#6c5ce7">
+  <meta name="description" content="CoHive - VIT's lit platform to find project partners and build dope projects together">
+  
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --purple: #6c5ce7;
+      --pink: #fd79a8;
+      --teal: #00cec9;
+      --yellow: #ffeaa7;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --gradient: linear-gradient(135deg, var(--purple), var(--pink));
+      --gradient-horizontal: linear-gradient(90deg, var(--purple), var(--pink));
+    }
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    h1, h2, h3, h4, h5 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+    }
+    
+    /* Navbar - Glassmorphism */
+    .navbar {
+      background: rgba(255, 255, 255, 0.8) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1rem 0;
+    }
+    
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 1.8rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .nav-link {
+      font-weight: 600;
+      color: var(--dark) !important;
+      margin: 0 0.5rem;
+      position: relative;
+    }
+    
+    .nav-link.active {
+      color: var(--purple) !important;
+    }
+    
+    .nav-link:hover:after {
+      width: 100%;
+    }
+    
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: var(--gradient);
+      transition: width 0.3s ease;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+      background: var(--gradient);
+      color: white;
+      padding: 5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      z-index: 0;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    /* Buttons */
+    .btn {
+      font-weight: 600;
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: white;
+      color: var(--purple);
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      color: var(--purple);
+    }
+    
+    .btn-outline-light {
+      border: 2px solid white;
+      color: white;
+      background: transparent;
+    }
+    
+    .btn-outline-light:hover {
+      background: white;
+      color: var(--purple);
+    }
+    
+    /* Stats Section */
+    .stats-section {
+      padding: 4rem 0;
+      background: white;
+    }
+    
+    .stat-card {
+      text-align: center;
+      padding: 2rem;
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      font-weight: 600;
+      color: var(--dark);
+    }
+    
+    /* Features Section */
+    .features-section {
+      padding: 5rem 0;
+      background: var(--light);
+    }
+    
+    .feature-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      height: 100%;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gradient);
+      color: white;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Departments Section */
+    .departments-section {
+      padding: 4rem 0;
+      background: white;
+    }
+    
+    .department-tag {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: rgba(108, 92, 231, 0.1);
+      color: var(--purple);
+      border-radius: 50px;
+      margin: 0.25rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .department-tag:hover {
+      background: var(--gradient);
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    /* Testimonials */
+    .testimonials-section {
+      padding: 5rem 0;
+      background: var(--light);
+    }
+    
+    .testimonial-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      position: relative;
+      height: 100%;
+    }
+    
+    .testimonial-quote {
+      position: absolute;
+      top: 1rem;
+      left: 1.5rem;
+      font-size: 3rem;
+      color: rgba(108, 92, 231, 0.1);
+      line-height: 1;
+    }
+    
+    .testimonial-content {
+      margin-top: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+    
+    .testimonial-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      margin-right: 1rem;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+      padding: 5rem 0;
+      background: var(--gradient);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cta-section:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      z-index: 0;
+    }
+    
+    .cta-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Footer Styles */
+    footer {
+      background: var(--dark);
+      color: #ffffff;
+      padding: 4rem 0 2rem;
+      margin-top: 4rem;
+    }
+    
+    footer h5 {
+      color: #ffffff;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+    
+    footer p {
+      color: #ffffff;
+      opacity: 0.9;
+    }
+    
+    footer a {
+      color: #ffffff;
+      opacity: 0.9;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    footer a:hover {
+      color: var(--primary);
+      opacity: 1;
+    }
+    
+    footer .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      margin-right: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    footer .social-links a:hover {
+      background: var(--primary);
+      color: #ffffff;
+      transform: translateY(-3px);
+    }
+    
+    footer .list-unstyled li {
+      margin-bottom: 0.75rem;
+    }
+    
+    footer .list-unstyled a {
+      color: #ffffff;
+      opacity: 0.9;
+    }
+    
+    footer .list-unstyled a:hover {
+      color: var(--primary);
+      opacity: 1;
+    }
+    
+    footer hr {
+      border-color: rgba(255, 255, 255, 0.1);
+      margin: 2rem 0;
+    }
+    
+    footer .text-muted {
+      color: #ffffff !important;
+      opacity: 0.9;
+    }
+    
+    footer .text-muted i {
+      color: var(--primary);
+      opacity: 1;
+    }
+    
+    /* VIT Banner */
+    .vit-banner {
+      background: var(--gradient);
+      color: white;
+      padding: 0.75rem 0;
+      text-align: center;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .stat-number {
+        font-size: 2.5rem;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+      
+      .d-flex.gap-3 {
+        flex-direction: column;
+        gap: 1rem !important;
+      }
+    }
+    
+    /* Animation */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    /* Typing animation cursor */
+    .typing-text::after {
+      content: '|';
+      animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="/">CoHive</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item" id="loginNavItem">
+            <a class="nav-link" href="/auth/login.html">Login</a>
+          </li>
+          <li class="nav-item" id="signupNavItem">
+            <a class="nav-link" href="/auth/signup.html">Sign Up</a>
+          </li>
+          <li class="nav-item d-none" id="dashboardNavItem">
+            <a class="nav-link" href="/dashboard.html">Dashboard</a>
+          </li>
+          <li class="nav-item d-none" id="logoutNavItem">
+            <a class="nav-link" href="#" id="logoutLink">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- VIT Banner -->
+  <div class="vit-banner">
+    <div class="container">
+      <p class="mb-0"><i class="fas fa-university me-2"></i>Exclusively for VIT Students - Find Your Perfect Project Partners</p>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 hero-content">
+          <h1 class="hero-title">Find Your <span class="typing-text" style="color: var(--yellow);"></span> at VIT</h1>
+          <p class="hero-subtitle">Connect with fellow VITians to collaborate on dope projects, build your portfolio, and create something amazing together.</p>
+          <div class="d-flex gap-3 justify-content-center">
+            <a href="/auth/signup.html" class="btn btn-primary btn-lg">
+              <i class="fas fa-user-plus me-2"></i>Join Now
+            </a>
+            <a href="#how-it-works" class="btn btn-outline-light btn-lg">
+              <i class="fas fa-play-circle me-2"></i>How It Works
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md-3 mb-4 mb-md-0">
+          <div class="stat-card">
+            <div class="stat-number">1,500+</div>
+            <div class="stat-label">VIT Students</div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4 mb-md-0">
+          <div class="stat-card">
+            <div class="stat-number">300+</div>
+            <div class="stat-label">Projects Created</div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4 mb-md-0">
+          <div class="stat-card">
+            <div class="stat-number">20+</div>
+            <div class="stat-label">Departments</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">VIT Exclusive</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section" id="how-it-works">
+    <div class="container">
+      <div class="row justify-content-center mb-5">
+        <div class="col-lg-8 text-center">
+          <h2 class="mb-3">How CoHive Works</h2>
+          <p class="text-muted">Find your perfect project partners in just a few simple steps</p>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <h4>1. Create Your Profile</h4>
+            <p>Set up your profile with your skills, interests, and what kind of projects you're looking for.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <h4>2. Find Partners</h4>
+            <p>Browse through VIT students with complementary skills or join existing project teams.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-laptop-code"></i>
+            </div>
+            <h4>3. Collaborate & Build</h4>
+            <p>Connect with your team, share ideas, and create something amazing together.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Departments Section -->
+  <section class="departments-section">
+    <div class="container">
+      <div class="row justify-content-center mb-5">
+        <div class="col-lg-8 text-center">
+          <h2 class="mb-3">Connect Across Departments</h2>
+          <p class="text-muted">Find students from your department or collaborate across disciplines</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <a href="#" class="department-tag">CSE</a>
+          <a href="#" class="department-tag">IT</a>
+          <a href="#" class="department-tag">ECE</a>
+          <a href="#" class="department-tag">EEE</a>
+          <a href="#" class="department-tag">MECH</a>
+          <a href="#" class="department-tag">CIVIL</a>
+          <a href="#" class="department-tag">AUTO</a>
+          <a href="#" class="department-tag">CHEM</a>
+          <a href="#" class="department-tag">BIOTECH</a>
+          <a href="#" class="department-tag">FOOD</a>
+          <a href="#" class="department-tag">TEXTILE</a>
+          <a href="#" class="department-tag">PROD</a>
+          <a href="#" class="department-tag">META</a>
+          <a href="#" class="department-tag">MINING</a>
+          <a href="#" class="department-tag">AGRI</a>
+          <a href="#" class="department-tag">ARCH</a>
+          <a href="#" class="department-tag">PLAN</a>
+          <a href="#" class="department-tag">BCA</a>
+          <a href="#" class="department-tag">MCA</a>
+          <a href="#" class="department-tag">BSC</a>
+          <a href="#" class="department-tag">MSC</a>
+          <a href="#" class="department-tag">BBA</a>
+          <a href="#" class="department-tag">MBA</a>
+          <a href="#" class="department-tag">LAW</a>
+          <a href="#" class="department-tag">PHARMA</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="row justify-content-center mb-5">
+        <div class="col-lg-8 text-center">
+          <h2 class="mb-3">What VIT Students Say</h2>
+          <p class="text-muted">Hear from students who found their perfect project partners on CoHive</p>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <div class="testimonial-quote">"</div>
+            <div class="testimonial-content">
+              <p>CoHive helped me find an amazing team for my final year project. We ended up building an AI model that got published in a conference!</p>
+              <div class="testimonial-author">
+                <div class="testimonial-avatar">R</div>
+              <div>
+                  <h5 class="mb-0">Rahul K.</h5>
+                  <small class="text-muted">CSE, 2025 Batch</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <div class="testimonial-quote">"</div>
+            <div class="testimonial-content">
+              <p>As a design student, I needed tech partners for my app idea. Found two brilliant coders through CoHive and we won the hackathon!</p>
+              <div class="testimonial-author">
+                <div class="testimonial-avatar">P</div>
+              <div>
+                  <h5 class="mb-0">Priya M.</h5>
+                  <small class="text-muted">IT, 2025 Batch</small>
+                </div>
+              </div>
+            </div>
+              </div>
+            </div>
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <div class="testimonial-quote">"</div>
+            <div class="testimonial-content">
+              <p>Met my current startup co-founders through CoHive. What started as a class project is now our full-time venture!</p>
+              <div class="testimonial-author">
+                <div class="testimonial-avatar">A</div>
+              <div>
+                  <h5 class="mb-0">Arjun S.</h5>
+                  <small class="text-muted">ECE, 2022 Batch</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="row justify-content-center text-center">
+        <div class="col-lg-8 cta-content">
+      <h2 class="mb-4">Ready to Find Your Project Partners?</h2>
+          <p class="mb-5" style="font-size: 1.25rem;">Join the VIT-exclusive platform for project collaboration and take your ideas to the next level.</p>
+          <a href="/auth/signup.html" class="btn btn-primary btn-lg px-5">
+            <i class="fas fa-rocket me-2"></i>Get Started Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5 class="mb-3">CoHive</h5>
+          <p class="text-muted">Empowering students to collaborate, innovate, and build amazing projects together.</p>
+          <div class="social-links">
+            <a href="#" class="me-3"><i class="fab fa-github"></i></a>
+            <a href="#" class="me-3"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="me-3"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+        <div class="col-md-2 mb-4 mb-md-0">
+          <h5 class="mb-3">Quick Links</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="/dashboard.html">Dashboard</a></li>
+            <li class="mb-2"><a href="/profile.html">Profile</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2 mb-4 mb-md-0">
+          <h5 class="mb-3">Resources</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="#">Documentation</a></li>
+            <li class="mb-2"><a href="#">Support</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5 class="mb-3">Contact Us</h5>
+          <ul class="list-unstyled text-muted">
+            <li class="mb-2"><i class="fas fa-envelope me-2"></i> support@cohive.com</li>
+            <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> VIT University, Vellore</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4">
+      <div class="row">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <p class="mb-0">&copy; 2025 CoHive. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Typing animation
+    const typingText = document.querySelector('.typing-text');
+    if (typingText) {
+      const words = ["project squad", "dream team", "collab crew", "hackathon partners", "study buddies"];
+      let wordIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      let typingSpeed = 150;
+
+      function type() {
+        const currentWord = words[wordIndex];
+        
+        if (isDeleting) {
+          typingText.textContent = currentWord.substring(0, charIndex - 1);
+          charIndex--;
+          typingSpeed = 50;
+        } else {
+          typingText.textContent = currentWord.substring(0, charIndex + 1);
+          charIndex++;
+          typingSpeed = 150;
+        }
+        
+        if (!isDeleting && charIndex === currentWord.length) {
+          isDeleting = true;
+          typingSpeed = 1500;
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          wordIndex = (wordIndex + 1) % words.length;
+          typingSpeed = 500;
+        }
+        
+        setTimeout(type, typingSpeed);
+      }
+
+      // Start animation
+      setTimeout(type, 1000);
+    }
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetElement = document.querySelector(this.getAttribute('href'));
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html> 
