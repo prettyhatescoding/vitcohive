@@ -6,8 +6,7 @@ CoHive is a full-stack web application designed for VIT students to find, join, 
 
 ## 🚀 Live Demo
 
-> 🌐 [https://cohive.onrender.com](https://cohive.onrender.com)  
-(*Replace this with your actual Render/Vercel URL once deployed.*)
+> 🌐 
 
 ---
 
